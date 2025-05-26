@@ -1,0 +1,17 @@
+{
+    "name": "Anchor Dev Container",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.shell.linux": "/bin/bash" 
+            },
+            "extensions": [
+                "rust-lang.rust-analyzer",
+                "ms-vscode.vscode-typescript-next"
+            ]
+        }
+    }
+}
