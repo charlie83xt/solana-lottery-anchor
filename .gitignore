@@ -1,0 +1,33 @@
+# Rust & Anchor
+target/
+**/*.rs.bk
+Cargo.lock
+
+
+# IDE & System
+.idea/
+.vscode/
+.DS_Store
+
+
+# Local anchor / solana config
+Anchor.toml
+*.so
+
+
+# Wallets / Keys
+**/id.json
+**/.config/solana/
+
+
+# Node / NPM
+node_modules/
+.yarn/
+
+
+# Vercel / CI
+.vercel/
+
+
+# Others
+*.log
