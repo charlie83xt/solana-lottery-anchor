@@ -1,8 +1,8 @@
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{clock::Clock, program::invoke, system_instruction};
-use solana_program::program::invoke_signed;
-use anchor_lang::solana_program::sysvar::recent_blockhashes;
-use solana_program::sysvar::Sysvar;
+use anchor_lang::solana_program::program::invoke_signed;
+// use anchor_lang::solana_program::sysvar::recent_blockhashes;
+use anchor_lang::solana_program::sysvar::Sysvar;
 // use anchor_lang::system_program::{transfer, Transfer};
 
 // This is your program's public key and it will update
@@ -28,6 +28,12 @@ pub mod solana_lottery {
         // Initialise Treasury PDA as a system account (Good to prevent i from being infunded)
         let treasury_account_info = ctx.accounts.treasury_pda.to_account_info();
         if treasury_account_info.lamports() == 0 {
+
+            let signer_seeds: &[&[u8]] = &[
+                b"treasury_pda",
+                &[treasury_bump],
+            ];
+
             invoke_signed(
             &system_instruction::create_account(
                 &ctx.accounts.authority.key(),
@@ -41,7 +47,7 @@ pub mod solana_lottery {
                 treasury_account_info.clone(),
                 ctx.accounts.system_program.to_account_info(),
             ], 
-            &[&[b"treasury_pda", &[treasury_bump]]],
+            &[signer_seeds],
             )?;
         }
 
@@ -151,6 +157,12 @@ pub mod solana_lottery {
 
         let rollover_balance = **treasury_pda.to_account_info().lamports.borrow();
         if rollover_balance > 0 {
+
+            let signer_seeds: &[&[u8]] = &[
+                b"treasury_pda",
+                &[ctx.bumps.treasury_pda],
+            ];
+
             invoke_signed(
                 &system_instruction::transfer(
                     &treasury_pda.key(),
@@ -162,7 +174,7 @@ pub mod solana_lottery {
                     prize_vault.to_account_info(),
                     ctx.accounts.system_program.to_account_info(),
                 ],
-                &[&[b"treasury_pda", &[ctx.bumps.treasury_pda]]],
+                &[signer_seeds],
             )?;
 
             global_state.last_rollover = rollover_balance;
@@ -245,7 +257,7 @@ pub mod solana_lottery {
         let claim_pda = &mut ctx.accounts.claim_pda;
         let treasury_pda = &ctx.accounts.treasury_pda;
         let system_program = &ctx.accounts.system_program;
-        let clock = Clock::get()?;
+        // let clock = Clock::get()?;
 
 
         require_keys_eq!(
@@ -557,6 +569,7 @@ pub struct InitializeLottery<'info> {
     )]
     pub treasury_pda: SystemAccount<'info>,
     
+    /// CHECK: This is a system account created in the instruction. It is safe because we create it.
     #[account(mut)]
     pub prize_vault: AccountInfo<'info>,
 
@@ -581,12 +594,15 @@ pub struct GlobalState {
 pub struct BuyTicket<'info> {
     #[account(mut)]
     pub lottery: Account<'info, Lottery>,
+
+    /// CHECK: This is a system account created in the instruction. It is safe because we create it.
     #[account(
         mut,
         seeds = [b"prize_vault", lottery.key().as_ref()],
         bump
         )]
     pub prize_vault: AccountInfo<'info>,
+
     #[account(mut)]
     pub buyer: Signer<'info>,
     pub system_program: Program<'info, System>,
@@ -600,6 +616,7 @@ pub struct DrawWinner<'info> {
     )]
     pub lottery: Account<'info, Lottery>,
 
+    /// CHECK: This is a system account created in the instruction. It is safe because we create it.
     #[account(
         mut,
         seeds = [b"prize_vault", lottery.key().as_ref()],

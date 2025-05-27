@@ -10,14 +10,21 @@ anchor.setProvider(anchor.AnchorProvider.env());
 
 const program = anchor.workspace.SolanaLottery as anchor.Program<SolanaLottery>;
 
+const PROGRAM_ID = new PublicKey("7VD5huPrnENoik7jMZijXnnnVrKayBY3rwk8BLULh5oQ");
+
 // Client
 console.log("My address:", program.provider.publicKey.toString());
 // const balance = await program.provider.connection.getBalance(program.provider.publicKey);
 // console.log(`My balance: ${balance / web3.LAMPORTS_PER_SOL} SOL`);
 
-const lotteryPubkey = new PublicKey("66tYyDnMHZLWYdXkR7hsYrxB4wb35FQtqNWhUvDbTHoa");
-const PROGRAM_ID = new PublicKey("HPVGDAGGGSV93gZu3vk3uxz3RSWdvZQ6Tc9EgUCLi5TG");
+// const lotteryPubkey = new PublicKey("66tYyDnMHZLWYdXkR7hsYrxB4wb35FQtqNWhUvDbTHoa");
 
+// Derive the Global State Pda
+const [pda] = await PublicKey.findProgramAddressSync(
+  [Buffer.from("global_state_v3")],
+  PROGRAM_ID
+);
+console.log("Global State PDA:", pda.toBase58());
 // const lotteryBuffer = new anchor.BN(4).toArrayLike(Buffer, 'le', 8);
 // const [lotteryPda] = await PublicKey.findProgramAddress(
 //   [Buffer.from("lottery"), lotteryBuffer],
@@ -25,11 +32,10 @@ const PROGRAM_ID = new PublicKey("HPVGDAGGGSV93gZu3vk3uxz3RSWdvZQ6Tc9EgUCLi5TG")
 // );
 // console.log("Client derived PDA:", lotteryPda.toBase58())
 // async getGlobalStatePDA(): Promise<void> {
-const [pda] = await PublicKey.findProgramAddressSync(
-  [Buffer.from("global_state_v2")],
-  PROGRAM_ID
-  );
-console.log("Global State PDA:", pda.toBase58());
-    // return pda;
-// }
-const fetchedGlobalState = await program.account.fetch(globalState)
+
+// Fetch the globalstate account
+const globalState = await program.account.globalState.fetch(pda);
+console.log("Fetched Global State:", globalState);
+
+// const currentNumber = await 
+// const fetchedGlobalState = await program.account.fetch(globalState)
