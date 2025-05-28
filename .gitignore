@@ -13,6 +13,7 @@ Cargo.lock
 # Local anchor / solana config
 Anchor.toml
 *.so
+.env
 
 
 # Wallets / Keys

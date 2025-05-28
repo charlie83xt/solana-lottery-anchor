@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "types": ["mocha", "chai"],
+    "baseUrl": ".",
+    "paths": {
+      "*":["node_modules/*", "target/ypes/*"]
+    },
+    "types": ["mocha", "chai", "dotenv"],
     "typeRoots": ["./node_modules/@types"],
     "lib": ["es2015"],
     "module": "esnext",
@@ -10,5 +14,5 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["client/**/*.ts", "tests/**/*.ts"]
+  "include": ["client/**/*.ts", "client1/**/*.ts", "tests/**/*.ts"]
 }

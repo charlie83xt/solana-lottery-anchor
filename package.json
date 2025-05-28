@@ -1,5 +1,10 @@
 {
+  "name": "solana-lottery-anchor",
+  "version": "1.0.0",
+  "type": "module",
   "scripts": {
+    "test": "dotenv -e .env -- ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts",
+    "client": "dotenv -e .env -- ts-node client/client.ts",
     "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
     "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check"
   },
@@ -8,11 +13,13 @@
     "@project-serum/anchor": "0.23.0",
     "@solana/web3.js": "^1.98.2",
     "assert": "*",
-    "bn.js": "*"
+    "bn.js": "*",
+    "dotenv": "^16.5.0"
   },
   "devDependencies": {
     "@types/bn.js": "^5.1.1",
     "@types/chai": "^4.3.5",
+    "@types/dotenv": "^6.1.1",
     "@types/mocha": "^10.0.1",
     "chai": "^4.5.0",
     "mocha": "^10.8.2",

@@ -4,10 +4,12 @@ import * as anchor from "@coral-xyz/anchor";
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 import { Program } from "@coral-xyz/anchor"
 import type { SolanaLottery } from "../target/types/solana_lottery";
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 // Configure the client to use the local cluster
 anchor.setProvider(anchor.AnchorProvider.env());
-
 const program = anchor.workspace.SolanaLottery as anchor.Program<SolanaLottery>;
 
 const PROGRAM_ID = new PublicKey("7VD5huPrnENoik7jMZijXnnnVrKayBY3rwk8BLULh5oQ");
@@ -35,7 +37,8 @@ console.log("Global State PDA:", pda.toBase58());
 
 // Fetch the globalstate account
 const globalState = await program.account.globalState.fetch(pda);
-console.log("Fetched Global State:", globalState);
+// console.log("Fetched Global State:", globalState);
+console.log("Current Lottery Count:", globalState.lotteryCount.toNumber());
 
 // const currentNumber = await 
 // const fetchedGlobalState = await program.account.fetch(globalState)
