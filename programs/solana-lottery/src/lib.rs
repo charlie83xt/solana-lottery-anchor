@@ -54,9 +54,9 @@ pub mod solana_lottery {
         global_state.authority = ctx.accounts.authority.key();
         global_state.dev_wallet_julian = ctx.accounts.dev_wallet_julian.key();
         global_state.dev_wallet_diego = ctx.accounts.dev_wallet_diego.key();
-        global_state.lottery_count = 6;
-        global_state.julian_share = 55;
-        global_state.diego_share = 45;
+        global_state.lottery_count = 1;
+        global_state.julian_share = 57;
+        global_state.diego_share = 43;
         
         msg!("Global Lottery Counter Initialized!");
         Ok(())
